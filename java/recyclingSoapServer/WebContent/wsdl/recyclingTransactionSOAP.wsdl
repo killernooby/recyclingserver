@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.example.org/recyclingTransaction/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="recyclingTransaction" targetNamespace="http://www.example.org/recyclingTransaction/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.example.org/recyclingTransaction/">
+      <xsd:element name="addTransactionString">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="addTransactionStringResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="addTransaction">
+      	<xsd:complexType>
+      		<xsd:sequence>
+
+      			<xsd:element name="userID" type="xsd:string"/>
+      			<xsd:element name="locationID" type="xsd:string"/>
+      			<xsd:element name="timestamp" type="xsd:dateTime"/>
+      			<xsd:element name="paper" type="xsd:int"/>
+
+      			<xsd:element name="plastic" type="xsd:int"/>
+      			<xsd:element name="glass" type="xsd:int"/>
+      			<xsd:element name="metal" type="xsd:int"/>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="addTransactionResponse">
+      	<xsd:complexType>
+      		<xsd:sequence>
+
+      			<xsd:element name="out" type="xsd:string"/>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="addTransactionStringRequest">
+    <wsdl:part element="tns:addTransactionString" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="addTransactionStringResponse">
+    <wsdl:part element="tns:addTransactionStringResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="addTransactionRequest">
+  	<wsdl:part element="tns:addTransaction" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="addTransactionResponse">
+  	<wsdl:part element="tns:addTransactionResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="recyclingTransaction">
+    <wsdl:operation name="addTransactionString">
+      <wsdl:input message="tns:addTransactionStringRequest"/>
+      <wsdl:output message="tns:addTransactionStringResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="addTransaction">
+    	<wsdl:input message="tns:addTransactionRequest"/>
+    	<wsdl:output message="tns:addTransactionResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="recyclingTransactionSOAP" type="tns:recyclingTransaction">
+
+  	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+  	<wsdl:operation name="addTransactionString">
+
+  		<soap:operation soapAction="http://www.example.org/recyclingTransaction/addTransactionString"/>
+  		<wsdl:input>
+
+  			<soap:body use="literal"/>
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal"/>
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="addTransaction">
+
+  		<soap:operation soapAction="http://www.example.org/recyclingTransaction/addTransaction"/>
+  		<wsdl:input>
+
+  			<soap:body use="literal"/>
+  		</wsdl:input>
+  		<wsdl:output>
+
+  			<soap:body use="literal"/>
+  		</wsdl:output>
+  	</wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="recyclingTransaction">
+    <wsdl:port binding="tns:recyclingTransactionSOAP" name="recyclingTransactionSOAP">
+      <soap:address location="http://localhost:9001/recyclingSoapServer/services/recyclingTransactionSOAP"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

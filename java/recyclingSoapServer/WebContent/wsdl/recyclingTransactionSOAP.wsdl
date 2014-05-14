@@ -93,7 +93,7 @@
   </wsdl:binding>
   <wsdl:service name="recyclingTransaction">
     <wsdl:port binding="tns:recyclingTransactionSOAP" name="recyclingTransactionSOAP">
-      <soap:address location="http://localhost:9001/recyclingSoapServer/services/recyclingTransactionSOAP"/>
+      <soap:address location="http://77.250.32.173:9001/recyclingSoapServer/services/recyclingTransactionSOAP"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

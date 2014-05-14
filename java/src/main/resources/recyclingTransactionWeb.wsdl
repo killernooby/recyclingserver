@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.example.org/recyclingTransaction/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="recyclingTransaction" targetNamespace="http://www.example.org/recyclingTransaction/">
   <wsdl:types>
-    <xsd:schema targetNamespace="http://www.example.org/recyclingTransaction/">
+    <xsd:schema targetNamespace="77.250.32.173:9080/recyclingTransaction/">
       <xsd:element name="addTransactiontext">
         <xsd:complexType>
           <xsd:sequence>

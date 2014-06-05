@@ -1,5 +1,6 @@
 package recyclingserver;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import com.datastax.driver.core.Cluster;
@@ -28,8 +29,8 @@ public class DBconstructor {
 	}
 
 	public void createSchema() {
-		//session.execute("CREATE KEYSPACE recycling WITH replication "
-		//		+ "= {'class':'SimpleStrategy', 'replication_factor':3};");
+		session.execute("CREATE KEYSPACE recycling WITH replication "
+				+ "= {'class':'SimpleStrategy', 'replication_factor':3};");
 		//User table
 		session.execute("CREATE TABLE recycling.users (" 
 				+ "userID uuid PRIMARY KEY,"
@@ -59,8 +60,10 @@ public class DBconstructor {
 				+ "plastic int,"
 				+ "glas int,"
 				+ "metal int,"
-				+ "PRIMARY KEY (userID, locationID, time)"
+				+ "PRIMARY KEY (time, userID, locationID)"
 				+ ");");
+		
+		//CREATE TABLE recycling.recycledMaterials (userID uuid,locationID uuid,time timestamp,paper int,plastic int,glas int,metal int,PRIMARY KEY ( userID, time,locationID));
 			
 	}
 	
@@ -73,21 +76,37 @@ public class DBconstructor {
 	public void addSampleData(){
 		String batch = String.format("BEGIN BATCH%n");
 		
+		/*
+		 * username | userid -----------+--------------------------------------
+		 * ckramer | 39659b52-97e4-4513-b3b9-4061974c9bd5 
+		 * jseinfeld | a30f1f78-ce11-4f52-963c-40ff1903cb10 
+		 * ebenes | fe9140a4-a18d-47ad-8fb6-8c85d3a5f7d8 
+		 * nycadmin | 85f81b76-30c5-415a-b03d-77a3be842705 
+		 * gcostanza | 6ab62cc1-d858-48f6-b52f-194203bdade3
+		 */
+
+		/*
+		 * locationname | locationid
+		 * --------------------+-------------------------------------- 
+		 * Jet Propulsion Lab | 3cb24832-f1b7-4b1c-a191-e644c8574142 
+		 * Kwik-E-Mart | 484f7753-adbe-45ae-b1d9-492c6c5a1c07 
+		 * Area 51 | a3ca2c55-58a6-4edc-b242-e3d353ea74af
+		 */
 				
 		String base =   "INSERT INTO recycling.users (userID, firstname, lastname, IDnumber, pin, email, username, password, usertype) VALUES" ;
-		UUID juuid = UUID.randomUUID();
-		UUID guuid = UUID.randomUUID();
-		UUID euuid = UUID.randomUUID();
-		UUID cuuid = UUID.randomUUID();
+		UUID juuid = UUID.fromString("a30f1f78-ce11-4f52-963c-40ff1903cb10");
+		UUID guuid = UUID.fromString("6ab62cc1-d858-48f6-b52f-194203bdade3");
+		UUID euuid = UUID.fromString("fe9140a4-a18d-47ad-8fb6-8c85d3a5f7d8");
+		UUID cuuid = UUID.fromString("39659b52-97e4-4513-b3b9-4061974c9bd5");
 		batch = batch + base + String.format("(%s,'Jerry', 'Seinfeld', 1, 1234, 'seinfeld@madeup.com','jseinfeld','notmypassword','normal')%n",juuid);
 		batch = batch + base + String.format("(%s,'George', 'Costanza', 2, 4321, 'costanza@madeup.com','gcostanza','notmypassword','normal')%n",guuid);
 		batch = batch + base + String.format("(%s,'Elaine', 'Benes', 3, 5678, 'benes@madeup.com','ebenes','notmypassword','normal')%n",euuid);
 		batch = batch + base + String.format("(%s,'Cosmo', 'Kramer', 4, 8765, 'kramer@kramer.com','ckramer','notmypassword','normal')%n",cuuid);
-		batch = batch + base + String.format("(%s,'New York','City', 5, 2468, 'tech@nyc.com','nycadmin','notmypassword','Municipality')%n",UUID.randomUUID());
+		batch = batch + base + String.format("(%s,'New York','City', 5, 2468, 'tech@nyc.com','nycadmin','notmypassword','Municipality')%n",UUID.fromString("85f81b76-30c5-415a-b03d-77a3be842705"));
 		
-		UUID xuuid = UUID.randomUUID();
-		UUID yuuid = UUID.randomUUID();
-		UUID zuuid = UUID.randomUUID();
+		UUID xuuid = UUID.fromString("484f7753-adbe-45ae-b1d9-492c6c5a1c07");
+		UUID yuuid = UUID.fromString("3cb24832-f1b7-4b1c-a191-e644c8574142");
+		UUID zuuid = UUID.fromString("a3ca2c55-58a6-4edc-b242-e3d353ea74af");
 		base =   "INSERT INTO recycling.location (locationID, locationName, locationAddress, longitude, lattitude, ip) VALUES" ;
 		
 		batch = batch + base + String.format("(%s,'Kwik-E-Mart', 'Springfield', -93.304221, 37.201258, '127.0.0.1')%n",xuuid);
@@ -111,7 +130,7 @@ public class DBconstructor {
 	public static void main(String[] args) {
 		  DBconstructor client = new DBconstructor();
 		  client.connect("127.0.0.1");
-		  client.dropTable();
+		  //client.dropTable();
 		  client.createSchema();
 		  client.addSampleData();
 		  client.close();

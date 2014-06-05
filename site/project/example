@@ -1,0 +1,102 @@
+			<?php
+            //$cassandra->createKeyspace('example');	
+            $cassandra->useKeyspace('example');
+
+$version = $cassandra->getVersion();
+echo 'Version through wrapper: <pre>'.print_r($version, true).'</pre><hr/>';
+ 
+// cluster is a pool of connections
+$cluster = $cassandra->getCluster();
+echo 'Cluster: <pre>'.print_r($cluster, true).'</pre><hr/>';
+ 
+// you can ask the cluster for a connection to a random seed server from pool
+$connection = $cluster->getConnection();
+echo 'Connection: <pre>'.print_r($connection, true).'</pre><hr/>';
+ 
+// access column family, using the singleton syntax
+// there is shorter "cf" methid that is an alias to "columnFamily"
+$userColumnFamily = Cassandra::getInstance()->columnFamily('user');
+echo 'Column family "user": <pre>'.print_r($userColumnFamily, true).'</pre><hr/>';
+echo '<p>There is a useful method for getting a representation of an entire keyspace schema:</p>';
+echo '<pre class="brush: php;">';
+$schema = $cassandra->getKeyspaceSchema('example');
+echo 'Schema: <pre>'.print_r($schema, true).'</pre>';
+
+// 			$cassandra->createStandardColumnFamily(
+//     'example', // keyspace name
+//     'user',             // the column-family name
+//     array(              // list of columns with metadata
+//         array(
+//             'name' => 'name',
+//             'type' => Cassandra::TYPE_UTF8,
+//             'index-type' => Cassandra::INDEX_KEYS, // create secondary index
+//             'index-name' => 'NameIdx'
+//         ),
+//         array(
+//             'name' => 'email',
+//             'type' => Cassandra::TYPE_UTF8
+//         ),
+//         array(
+//             'name' => 'age',
+//             'type' => Cassandra::TYPE_INTEGER,
+//             'index-type' => Cassandra::INDEX_KEYS,
+//             'index-name' => 'AgeIdx'
+//         )
+//     )
+//     // actually accepts more parameters with reasonable defaults
+// );
+
+
+				$userCF = $cassandra->cf('user');
+
+				$cassandra->cf('user')->set(
+    'chuck', // key name
+    array(   // column names and values
+        'email' => 'chuck@norris.com',
+        'name' => 'Chuck Norris',
+        'age' => 24
+    ),
+    Cassandra::CONSISTENCY_QUORUM // optional consistency to use
+    // also accepts optional custom timestamp and time to live
+);
+				// when inserting data, it's ok if key name contains ".", no need to escape them
+$cassandra->set(
+    'user.jane.doe',
+    array(
+        'email' => 'jane@doe.com',
+        'name' => 'Jane Doe',
+        'age' => 24
+    )
+);
+
+
+// lets fetch all the information about user john
+$john = $cassandra->get('user.john');
+echo 'User "john": <pre>'.print_r($john, true).'</pre><hr/>';
+ 
+// since the jane key "jane.doe" includes a ".", we have to escape it
+$jane = $cassandra->get('user.'.Cassandra::escape('jane.doe'));
+echo 'User "jane.doe": <pre>'.print_r($jane, true).'</pre><hr/>';
+ 
+// there is some syntatic sugar on the query of Cassandra::get() allowing you
+// to fetch specific columns, ranges of them, limit amount etc. for example,
+// lets only fetch columns name and age
+$chuck = $cassandra->get('user.chuck:name,age');
+echo 'User "chuck", name and age: <pre>'.print_r($chuck, true).'</pre><hr/>';
+ 
+// fetch all solumns from age to name (gets all columns in-between too)
+$chuck2 = $cassandra->get('user.chuck:age-name');
+echo 'User "chuck", columns ago to name: <pre>'.print_r($chuck2, true).'</pre><hr/>';
+ 
+// the range columns do not need to exist, we can get character ranges
+$chuck3 = $cassandra->get('user.chuck:a-z');
+echo 'User "chuck", columns a-z: <pre>'.print_r($chuck3, true).'</pre><hr/>';
+ 
+// when performing range queries, we can also limit the number of columns
+// returned (2); also the method accepts consistency level as second parameter
+$chuck4 = $cassandra->get('user.chuck:a-z|2', Cassandra::CONSISTENCY_ALL);
+echo 'User "chuck", columns a-z, limited to 2 columns: <pre>'.print_r($chuck4, true).'</pre>';
+
+
+
+				?>

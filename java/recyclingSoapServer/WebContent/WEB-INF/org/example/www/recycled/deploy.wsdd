@@ -1,0 +1,26 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from recycled WSDL service -->
+
+  <service name="recycledSOAP" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://www.example.org/recycled/"/>
+      <parameter name="wsdlServiceElement" value="recycled"/>
+      <parameter name="schemaUnqualified" value="http://www.example.org/recycled/"/>
+      <parameter name="wsdlServicePort" value="recycledSOAP"/>
+      <parameter name="className" value="org.example.www.recycled.RecycledSOAPSkeleton"/>
+      <parameter name="wsdlPortType" value="recycledInterface"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <parameter name="allowedMethods" value="*"/>
+
+  </service>
+</deployment>

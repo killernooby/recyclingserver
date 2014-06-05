@@ -27,10 +27,12 @@ public class QueueListener implements Runnable{
 		batman = new BatchManager(dbNode, 1, 60);
 	}
 
-	@Override
 	public void run() {
 		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost("localhost");
+	    factory.setHost("localhost");
+		
+		
+	
 		Connection connection;
 		try {
 			connection = factory.newConnection();

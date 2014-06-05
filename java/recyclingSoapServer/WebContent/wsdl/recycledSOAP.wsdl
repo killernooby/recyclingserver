@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.example.org/recycled/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="recycled" targetNamespace="http://www.example.org/recycled/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.example.org/recycled/">
+      <xsd:element name="addTransactionText">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="transaction" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="addTransactionTextResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+
+    
+            <xsd:element name="NewElement" type="xsd:string"/>
+            <xsd:element name="addTransaction">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element name="userID" type="xsd:string"/>
+            			<xsd:element name="locationID" type="xsd:string">
+            			</xsd:element>
+            			<xsd:element name="time" type="xsd:dateTime">
+            			</xsd:element>
+            			<xsd:element name="paper" type="xsd:int">
+            			</xsd:element>
+            			<xsd:element name="plastic" type="xsd:int">
+            			</xsd:element>
+            			<xsd:element name="glass" type="xsd:int">
+            			</xsd:element>
+            			<xsd:element name="metal" type="xsd:int">
+            			</xsd:element>
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="addTransactionResponse">
+            	<xsd:complexType>
+            		<xsd:sequence>
+
+            			<xsd:element name="out" type="xsd:string"/>
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+		</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="addTransactionTextRequest">
+    <wsdl:part element="tns:addTransactionText" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="addTransactionTextResponse">
+    <wsdl:part element="tns:addTransactionTextResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="addTransactionRequest">
+  	<wsdl:part element="tns:addTransaction" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="addTransactionResponse">
+  	<wsdl:part element="tns:addTransactionResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="recycledInterface">
+    <wsdl:operation name="addTransactionText">
+      <wsdl:input message="tns:addTransactionTextRequest"/>
+      <wsdl:output message="tns:addTransactionTextResponse"/>
+    </wsdl:operation>
+
+    
+    <wsdl:operation name="addTransaction">
+    	<wsdl:input message="tns:addTransactionRequest"/>
+    	<wsdl:output message="tns:addTransactionResponse"/>
+        </wsdl:operation>
+  </wsdl:portType>
+
+    <wsdl:binding name="recycledSOAP" type="tns:recycledInterface">
+  	<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+  	<wsdl:operation name="addTransactionText">
+  		<soap:operation soapAction="http://www.example.org/recycled/addTransactionText"/>
+  		<wsdl:input>
+  			<soap:body use="literal"/>
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal"/>
+  		</wsdl:output>
+  	</wsdl:operation>
+  	<wsdl:operation name="addTransaction">
+  		<soap:operation soapAction="http://www.example.org/recycled/addTransaction"/>
+  		<wsdl:input>
+  			<soap:body use="literal"/>
+  		</wsdl:input>
+  		<wsdl:output>
+  			<soap:body use="literal"/>
+  		</wsdl:output>
+  	</wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="recycled">
+    <wsdl:port binding="tns:recycledSOAP" name="recycledSOAP">
+      <soap:address location="http://localhost:9001/recyclingSoapServer/services/recycledSOAP"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
